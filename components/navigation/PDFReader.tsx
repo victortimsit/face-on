@@ -1,16 +1,24 @@
-import { useWindowWidth } from "@react-hook/window-size";
+import { useWindowHeight, useWindowWidth } from "@react-hook/window-size";
 import React, { useRef, useState } from "react";
 import { useHotkeys } from "react-hotkeys-hook";
 import { Document, Page, pdfjs } from "react-pdf";
+import Typography from "../data_display/Typography";
 import ReaderControls from "./ReaderControls";
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
-export default function PdfReader({ file }: { file: any }) {
+export default function PdfReader({
+  file,
+  className,
+}: {
+  file: any;
+  className?: string;
+}) {
   const [numPages, setNumPages] = useState(null);
   const [pageNumber, setPageNumber] = useState(1);
   const [controls, setControls] = useState(false);
 
-  const controlsTimeout = useRef(null);
+  const controlsTimeoutRef = useRef(null);
+  const currentPageRef = useRef(null);
 
   const handleNext = () => {
     setPageNumber(pageNumber + 1 > numPages ? 1 : pageNumber + 1);
@@ -20,13 +28,14 @@ export default function PdfReader({ file }: { file: any }) {
     setPageNumber(pageNumber - 1 < 1 ? numPages : pageNumber - 1);
   };
   const handleMouseMove = () => {
-    clearTimeout(controlsTimeout.current);
+    clearTimeout(controlsTimeoutRef.current);
     setControls(true);
 
-    controlsTimeout.current = setTimeout(() => {
+    controlsTimeoutRef.current = setTimeout(() => {
       setControls(false);
     }, 3000);
   };
+  const handlePageRenderSuccess = () => {};
   function onDocumentLoadSuccess({ numPages }) {
     setNumPages(numPages);
   }
@@ -50,11 +59,37 @@ export default function PdfReader({ file }: { file: any }) {
   );
   return (
     <div
-      className={`relative ${controls ? "cursor-auto" : "cursor-none"}`}
+      className={`h-screen flex items-center bg-pure-black relative ${
+        controls ? "cursor-auto" : "cursor-none"
+      } ${className}`}
       onMouseMove={handleMouseMove}
     >
-      <Document file={file} onLoadSuccess={onDocumentLoadSuccess}>
-        <Page width={useWindowWidth()} pageNumber={pageNumber} />
+      <Document
+        file={file}
+        onLoadSuccess={onDocumentLoadSuccess}
+        className="bg-pure-black"
+        loading={
+          <Typography variant="h3" className="h-screen w-screen bg-pure-black">
+            Loading document
+          </Typography>
+        }
+      >
+        <Page
+          ref={currentPageRef}
+          onRenderSuccess={handlePageRenderSuccess}
+          width={useWindowWidth()}
+          height={useWindowHeight()}
+          pageNumber={pageNumber}
+          className="flex items-center bg-pure-black"
+          loading={
+            <Typography
+              variant="h3"
+              className="h-screen w-screen bg-pure-black"
+            >
+              Loading page {pageNumber}
+            </Typography>
+          }
+        />
       </Document>
       <ReaderControls
         className={`fixed bottom-8 left-1/2 transform -translate-x-1/2 transition-opacity ${

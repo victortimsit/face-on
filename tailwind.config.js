@@ -11,6 +11,7 @@ module.exports = {
       primary: colors.indigo,
       secondary: colors.yellow,
       neutral: colors.gray,
+      "pure-black": "#000000"
     }
   },
   variants: {

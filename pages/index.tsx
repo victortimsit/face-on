@@ -1,6 +1,6 @@
 import Head from "next/head";
 import React, { useState } from "react";
-import Webcam from "react-webcam";
+import FloatFace from "../components/feedbacks/FloatFace";
 import UploadFile from "../components/inputs/UploadFile";
 import PdfReader from "../components/navigation/PDFReader";
 
@@ -26,10 +26,7 @@ export default function Home() {
           className="w-screen h-screen"
           allowFullScreen
         ></iframe> */}
-        <Webcam
-          className="bottom-8 right-8 rounded-full shadow-2xl fixed"
-          videoConstraints={{ width: 200, height: 200 }}
-        />
+        <FloatFace />
       </main>
     </div>
   );
