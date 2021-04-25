@@ -2,7 +2,7 @@ import Head from "next/head";
 import React, { useState } from "react";
 import Webcam from "react-webcam";
 import UploadFile from "../components/inputs/UploadFile";
-import PdfReader from "../components/PDFReader";
+import PdfReader from "../components/navigation/PDFReader";
 
 export default function Home() {
   const [file, setFile] = useState(null);
