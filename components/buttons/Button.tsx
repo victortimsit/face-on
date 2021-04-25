@@ -12,7 +12,7 @@ export default function Button({
 }) {
   return (
     <button
-      className="px-3 py-1 bg-primary-500 flex align-center items-center rounded-lg h-12"
+      className="px-3 py-1 bg-primary-500 flex align-center items-center rounded-lg h-12 focus:outline-none active:bg-primary-900 hover:bg-primary-400"
       onClick={onClick}
     >
       {icon && cloneElement(icon, { className: "h-5 w-5 text-neutral-50" })}

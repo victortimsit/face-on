@@ -3,6 +3,9 @@ module.exports = {
   purge: [],
   darkMode: false, // or 'media' or 'class'
   theme: {
+    cursor: {
+      none: "none"
+    },
     extend: {},
     colors: {
       primary: colors.indigo,
@@ -11,7 +14,9 @@ module.exports = {
     }
   },
   variants: {
-    extend: {},
+    extend: {
+      backgroundColor: ['active']
+    },
   },
   plugins: [],
 }
