@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { bytesToSize } from "../../utils/file";
 import Typography from "../data_display/Typography";
+import SearchBar from "./SearchBar";
 
 export default function UploadFile({
   className,
@@ -44,9 +45,12 @@ export default function UploadFile({
       <Typography variant="h3" className="pb-6 pointer-events-none">
         {title}
       </Typography>
-      <Typography variant="body1" className="pointer-events-none">
+      <Typography variant="body1" className="pb-6 pointer-events-none">
         {subtitle}
       </Typography>
+      <label htmlFor="input">
+        <SearchBar />
+      </label>
       <input
         className="w-full h-full opacity-0 absolute left-0 top-0 right-0 bottom-0"
         id="input"
