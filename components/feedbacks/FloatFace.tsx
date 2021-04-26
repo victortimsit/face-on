@@ -22,7 +22,7 @@ const Position = {
 };
 
 export default function Floatface(props) {
-  const [controls, setControls] = useState(true);
+  const [controls, setControls] = useState(false);
   const [dragPosition, setDragPosition] = useState({ x: 0, y: 0 });
   const [magnet, setMagnet] = useState(true);
   const [position, setPosition] = useState({
@@ -61,12 +61,12 @@ export default function Floatface(props) {
       onStop={() => setMagnet(false)}
     >
       <div
-        className={`${position.x} ${position.y} fixed`}
+        className={`${position.x} ${position.y} fixed w-25 h-25`}
         onMouseEnter={() => setControls(true)}
         onMouseLeave={() => setControls(false)}
       >
         <Webcam
-          className="rounded-full shadow-2xl m-2"
+          className="rounded-full shadow-2xl m-2 w-25 h-25"
           videoConstraints={{ width: 200, height: 200 }}
         />
         <div

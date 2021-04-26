@@ -33,7 +33,7 @@ export default function PdfReader({
 
     controlsTimeoutRef.current = setTimeout(() => {
       setControls(false);
-    }, 3000);
+    }, 1000);
   };
   const handlePageRenderSuccess = () => {};
   function onDocumentLoadSuccess({ numPages }) {
@@ -92,7 +92,7 @@ export default function PdfReader({
         />
       </Document>
       <ReaderControls
-        className={`fixed bottom-8 left-1/2 transform -translate-x-1/2 transition-opacity ${
+        className={`fixed bottom-0 left-1/2 transform -translate-x-1/2 transition-opacity ${
           controls
             ? "opacity-1 pointer-events-auto"
             : "opacity-0 pointer-events-none"

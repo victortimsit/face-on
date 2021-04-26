@@ -26,6 +26,14 @@ export default function Home() {
           className="w-screen h-screen"
           allowFullScreen
         ></iframe> */}
+        <iframe
+          className="w-screen h-screen"
+          src="https://docs.google.com/presentation/d/1NGY2q-8Ba_xGzvtvM3cTDucWgAk3-jvlk6qYnBVfkR8/embed?start=true"
+        ></iframe>
+        <iframe
+          className="w-screen h-screen"
+          src="https://memegine.com/"
+        ></iframe>
         <FloatFace />
       </main>
     </div>

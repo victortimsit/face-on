@@ -13,7 +13,12 @@ module.exports = {
       primary: colors.indigo,
       secondary: colors.yellow,
       neutral: colors.gray,
-      "pure-black": "#000000"
+      "pure-black": {
+        1000: "rgba(0, 0, 0, 1)",
+        500: "rgba(0, 0, 0, .5)",
+        300: "rgba(0, 0, 0, .3)",
+        200: "rgba(0, 0, 0, .2)",
+      }
     }
   },
   variants: {
