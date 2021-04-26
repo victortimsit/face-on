@@ -1,13 +1,27 @@
 import { SearchIcon } from "@heroicons/react/solid";
-import React from "react";
+import React, { ChangeEventHandler } from "react";
 
-export default function SearchBar({ className }: { className?: string }) {
+export default function SearchBar({
+  className,
+  onChange,
+}: {
+  className?: string;
+  onChange: ChangeEventHandler<HTMLInputElement>;
+}) {
   return (
-    <div
-      className={`px-4 py-4 flex items-center justify-center shadow-2xl rounded-2xl ${className}`}
+    <label
+      htmlFor="search"
+      className={`flex items-center ${className} relative`}
     >
-      <SearchIcon className="w-5 h-5 text-neutral-900" />
-      <input className="pl-2" placeholder="Search" type="text" />
-    </div>
+      <input
+        className="pl-12 outline-none px-4 py-4 shadow-2xl rounded-2xl focus:border focus:ring-2 focus:ring-blue-600"
+        id="search"
+        name="search"
+        placeholder="Search"
+        type="text"
+        onChange={onChange}
+      />
+      <SearchIcon className="left-4 w-5 h-5 absolute text-neutral-900 pointer-events-none" />
+    </label>
   );
 }
