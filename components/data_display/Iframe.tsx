@@ -1,28 +1,31 @@
 import React, { useEffect, useRef, useState } from "react";
-import Typography from "./Typography";
 
 export default function Iframe({
   src,
   className,
+  onLoadError,
+  onLoadSuccess,
 }: {
   src: string;
   className?: string;
+  onLoadError?: () => void;
+  onLoadSuccess?: () => void;
 }) {
   const [loaded, setLoaded] = useState(false);
   const ref = useRef(null);
 
   useEffect(() => {
     setLoaded(ref.current?.contentDocument ?? false);
+    if (!loaded && onLoadError) onLoadError();
+    else if (onLoadSuccess) onLoadSuccess();
   }, [loaded]);
 
   return (
-    <>
-      <iframe
-        ref={ref}
-        src={src}
-        className={`${className} ${loaded ? "block" : "hidden"}`}
-      />
-      {!loaded && <Typography>Failed to load iframe</Typography>}
-    </>
+    <iframe
+      onLoad={(e) => console.log(ref)}
+      ref={ref}
+      src={src}
+      className={`${className} ${loaded ? "block" : "hidden"}`}
+    />
   );
 }

@@ -9,6 +9,7 @@ import useIframe from "../hooks/useIframe";
 
 export default function Home() {
   const [file, setFile] = useState(null);
+  const [iframe, setIframe] = useState(false);
   const [loadedIframe, loadIframe] = useIframe();
 
   const iframeRef = useRef(null);
@@ -25,34 +26,29 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
-        {file ? (
-          <PdfReader file={file} />
-        ) : (
-          <>
+        {file && <PdfReader file={file} />}
+        {file == null && iframe == false && (
+          <div className="flex flex-col items-center justify-center w-full h-screen">
             <UploadFile
-              className="w-screen h-screen"
+              className="w-full"
               onFileLoad={(file) => setFile(file)}
             />
             <SearchBar onChange={(e) => loadIframe(e.target.value)} />
-          </>
+          </div>
         )}
-        {/* <iframe
-          src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Fproto%2FVCqH25gX8xtsOrYrBSmQKA%2FWebsite%3Fpage-id%3D126%253A3%26node-id%3D360%253A14455%26viewport%3D-4727%252C-1046%252C0.16638986766338348%26scaling%3Dscale-down"
-          className="w-screen h-screen"
-          allowFullScreen
-        ></iframe> */}
         {loadedIframe && (
-          <Iframe src={loadedIframe} className="w-screen h-screen" />
+          <Iframe
+            src={loadedIframe}
+            onLoadSuccess={() => setIframe(true)}
+            onLoadError={() => {
+              setIframe(false);
+              // window.prompt(
+              //   "Oops, iframe couldn't be loaded. Try another link or add PDF file!"
+              // );
+            }}
+            className="w-screen h-screen"
+          />
         )}
-        <Iframe src="https://www.facebook.com/"></Iframe>
-        {/* <iframe
-          className="w-screen h-screen"
-          src="https://docs.google.com/presentation/d/1NGY2q-8Ba_xGzvtvM3cTDucWgAk3-jvlk6qYnBVfkR8/embed?start=true"
-        ></iframe>
-        <iframe
-          className="w-screen h-screen"
-          src="https://memegine.com/"
-        ></iframe> */}
         <FloatFace />
       </main>
     </div>

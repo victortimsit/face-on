@@ -32,7 +32,7 @@ export default function UploadFile({
 
   return (
     <label
-      className={`w-96 h-96 flex relative flex-col justify-center items-center ${
+      className={`flex relative flex-col justify-center items-center ${
         active && "bg-red-200"
       } ${className}`}
       onDragStart={handleDragEnter}
@@ -47,7 +47,6 @@ export default function UploadFile({
       <Typography variant="body1" className="pb-12 pointer-events-none">
         {subtitle}
       </Typography>
-
       <input
         className="w-full h-full opacity-0 absolute left-0 top-0 right-0 bottom-0"
         id="input"
