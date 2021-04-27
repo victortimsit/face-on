@@ -1,3 +1,4 @@
+import fetch from 'node-fetch';
 export default async (req, res) => {
   try {
     const _res = await fetch(req.body.url, { method:"HEAD" });
