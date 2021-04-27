@@ -1,5 +1,6 @@
 import { useState } from "react";
-import xFramePermission from "../pages/api/xFramePermission";
+import xFramePermission from "../services/xFramePermission";
+
 
 enum ServiceURL {
   GOOGLE_SLIDE = "docs.google.com",
