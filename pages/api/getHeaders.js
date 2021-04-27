@@ -1,3 +1,8 @@
 module.exports = (req, res) => {
-  res.json({headers: req.headers})
+  try {
+    const _res = fetch(req.body.url, { method:"HEAD" });
+    res.json({headers: _res.headers})
+  } catch(error) {
+    throw Error(error);
+  }
 }
