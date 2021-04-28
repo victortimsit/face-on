@@ -33,14 +33,15 @@ const getFigmaIframe = (url: string) => {
 
 const useIframe = () => {
   const [loadedIframe, setLoadedIframe] = useState(null);
-  const loadIframe = async (url: string) => {
-
-    const iframeUrl: string = url.includes(ServiceURL.GOOGLE_SLIDE) ? getGoogleIframe(url) : url.includes(ServiceURL.FIGMA) ? getFigmaIframe(url) : url;
-    const res = await getXFrameOptions(iframeUrl);
-    console.log("x-frame-options", res)
-    setLoadedIframe(iframeUrl);
-    
-    // console.log("permission", xFrameOptions)
+  const loadIframe = async (url: string) => {    
+    if(url) {
+      // setLoadedIframe(null);
+      const iframeUrl: string = url.includes(ServiceURL.GOOGLE_SLIDE) ? getGoogleIframe(url) : url.includes(ServiceURL.FIGMA) ? getFigmaIframe(url) : url;
+      const res = await getXFrameOptions(iframeUrl);
+  
+      // Set loadedIframe to false if x_frame_options is "DENY" or "CROSS_ORIGIN"
+      setLoadedIframe(res.x_frame_options ? false : iframeUrl);
+    }
   }
 
   return [loadedIframe, loadIframe];
