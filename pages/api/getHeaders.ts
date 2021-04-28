@@ -10,8 +10,8 @@ export default async (req: VercelRequest, res: VercelResponse) => {
     "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE",
   }
   try {
-    const _res = await fetch(req.body.url, { method:"HEAD" });
-    console.log(req.body.url);
+    console.log("RECEIVE URL", req.body.url);
+    const _res = await fetch(req.body.url, { method:"HEAD", headers: _headers });
     for(const header in _headers) res.setHeader(header, _headers[header])
 
     res.json({headers: _res.headers})
