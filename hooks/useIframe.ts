@@ -1,5 +1,5 @@
 import { useState } from "react";
-import xFramePermission from "../services/xFramePermission";
+import getXFrameOptions from "../services/getXFrameOptions";
 
 
 enum ServiceURL {
@@ -36,9 +36,9 @@ const useIframe = () => {
   const loadIframe = async (url: string) => {
 
     const iframeUrl: string = url.includes(ServiceURL.GOOGLE_SLIDE) ? getGoogleIframe(url) : url.includes(ServiceURL.FIGMA) ? getFigmaIframe(url) : url;
+    const res = await getXFrameOptions(iframeUrl);
+    console.log("x-frame-options", res)
     setLoadedIframe(iframeUrl);
-    const res = await xFramePermission(iframeUrl);
-    console.log(res)
     
     // console.log("permission", xFrameOptions)
   }
