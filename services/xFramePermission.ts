@@ -9,7 +9,7 @@ const xFramePermission = async (url: string) => {
     url: url,
   });
   try {
-    const res = await fetch("https://face-on.vercel.app/api/getHeaders", {method:"POST", body: body, headers: _headers})
+    const res = await fetch("https://face-on.vercel.app/api/getXFrameOptions", {method:"POST", body: body, headers: _headers})
     return res;
   } catch(error) {
     console.log(error);
