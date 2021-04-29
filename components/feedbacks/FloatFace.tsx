@@ -23,6 +23,7 @@ const Position = {
 
 export default function Floatface(props) {
   const [controls, setControls] = useState(false);
+  const [ready, setReady] = useState(false);
   const [dragPosition, setDragPosition] = useState({ x: 0, y: 0 });
   const [magnet, setMagnet] = useState(true);
   const [position, setPosition] = useState({
@@ -54,19 +55,22 @@ export default function Floatface(props) {
   useHotkeys("cmd+down", (e) => handlePosition(e, { y: Position.y.bottom }));
   return (
     <Draggable
-      defaultClassName="cursor-grab"
+      defaultClassName={`cursor-grab`}
       defaultClassNameDragging="cursor-grabbing"
       position={dragPosition}
       onDrag={handleDrag}
       onStop={() => setMagnet(false)}
     >
       <div
-        className={`${position.x} ${position.y} fixed w-25 h-25`}
+        className={`${position.x} ${position.y} fixed`}
         onMouseEnter={() => setControls(true)}
         onMouseLeave={() => setControls(false)}
       >
         <Webcam
-          className="rounded-full shadow-2xl m-2 w-25 h-25"
+          onUserMedia={() => setReady(true)}
+          className={`rounded-full shadow-2xl m-2 flex-1 ${
+            !ready && "scale-0"
+          } transform transition-transform`}
           videoConstraints={{ width: 200, height: 200 }}
         />
         <div
