@@ -1,14 +1,13 @@
 import { useState } from "react";
 import getXFrameOptions from "../services/getXFrameOptions";
 
-
 enum ServiceURL {
   GOOGLE_SLIDE = "docs.google.com",
   FIGMA = "www.figma.com"
 }
 
 enum ServiceEmbedPath {
-  GOOGLE_SLIDE = "/embed?start=true",
+  GOOGLE_SLIDE = "/embed?start=false",
   FIGMA = "/embed?embed_host=share&url="
 }
 
@@ -28,7 +27,7 @@ const getGoogleIframe = (url: string) => {
 }
 
 const getFigmaIframe = (url: string) => {
-  return url;
+  return "https://" + ServiceURL.FIGMA + ServiceEmbedPath.FIGMA +  encodeURIComponent(url);
 }
 
 const useIframe = () => {
@@ -36,11 +35,16 @@ const useIframe = () => {
   const loadIframe = async (url: string) => {    
     if(url) {
       // setLoadedIframe(null);
+      // if(!url.includes("http")) return false
       const iframeUrl: string = url.includes(ServiceURL.GOOGLE_SLIDE) ? getGoogleIframe(url) : url.includes(ServiceURL.FIGMA) ? getFigmaIframe(url) : url;
-      const res = await getXFrameOptions(iframeUrl);
-  
-      // Set loadedIframe to false if x_frame_options is "DENY" or "CROSS_ORIGIN"
-      setLoadedIframe(res.x_frame_options ? false : iframeUrl);
+
+      try {
+        const res = await getXFrameOptions(iframeUrl);
+        // Set loadedIframe to false if x_frame_options is "DENY" or "SAMEORIGIN"
+        setLoadedIframe(res.x_frame_options ? false : iframeUrl);
+      } catch(error) {
+        setLoadedIframe(false);
+      }
     }
   }
 

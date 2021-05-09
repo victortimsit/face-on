@@ -4,9 +4,11 @@ const getXFrameOptions = async (url: string) => {
     const res = await fetch("https://face-on.vercel.app/api/getXFrameOptions", {method:"POST", body: JSON.stringify({
       url: url,
     })})
-    return res.json();
+    if(res.ok)
+    return res.json() 
+    else throw Error();
   } catch(error) {
-    console.log(error);
+    throw Error(error);
   }
 }
 

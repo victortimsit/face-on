@@ -6,16 +6,23 @@ import SnackNotif from "../components/feedbacks/SnackNotif";
 import SearchBar from "../components/inputs/SearchBar";
 import UploadFile from "../components/inputs/UploadFile";
 import PdfReader from "../components/navigation/PDFReader";
+import { errors } from "../data/errors";
 import useIframe from "../hooks/useIframe";
+import { isValidURL } from "../utils/isValidURL";
 
 export default function Home() {
   const [file, setFile] = useState(null);
   const [loadedIframe, loadIframe] = useIframe();
-  const [notif, setNotif] = useState(false);
+  const [notif, setNotif] = useState<false | string>(false);
 
   useEffect(() => {
-    if (loadedIframe == false) setNotif(true);
+    if (loadedIframe == false) setNotif(errors.unauthorized_iframe);
   }, [loadedIframe]);
+
+  const handleSearch = (e) => {
+    const url = isValidURL(e.target.value);
+    url ? loadIframe(e.target.value) : setNotif(errors.invalid_url);
+  };
 
   return (
     <div>
@@ -32,11 +39,11 @@ export default function Home() {
               onFileLoad={(file) => setFile(file)}
             />
             <SnackNotif
-              message="Oops, iframe couldn't be loaded. Try another link or add PDF file!"
-              run={notif}
+              message={notif && notif}
+              run={notif != false}
               onEnded={() => setNotif(false)}
             >
-              <SearchBar onChange={(e) => loadIframe(e.target.value)} />
+              <SearchBar onChange={handleSearch} />
             </SnackNotif>
           </div>
         )}

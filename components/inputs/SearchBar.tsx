@@ -14,7 +14,7 @@ export default function SearchBar({
       className={`flex items-center ${className} relative`}
     >
       <input
-        className="pl-12 outline-none px-4 py-4 shadow-2xl rounded-2xl focus:border focus:ring-2 focus:ring-blue-600"
+        className="pl-12 outline-none px-4 py-4 shadow-2xl rounded-2xl focus:border focus:ring-2 focus:ring-blue-600 border-neutral-200 border"
         id="search"
         name="search"
         placeholder="Search"

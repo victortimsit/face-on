@@ -10,7 +10,7 @@ const _headers = {
 
 const getXFrameOptions = async(url: string) => {
   try {
-    const res = await fetch(url, { method:"HEAD" });
+    const res = await fetch(url, { method:"GET" });
     return res.headers.get('x-frame-options');
   } catch(error) {
     throw Error(error);

@@ -18,7 +18,8 @@
     "react-draggable": "^4.4.3",
     "react-hotkeys-hook": "^3.3.1",
     "react-pdf": "^5.2.0",
-    "react-webcam": "^5.2.3"
+    "react-webcam": "^5.2.3",
+    "use-onclickoutside": "^0.3.2"
   },
   "devDependencies": {
     "@types/node": "^14.14.41",

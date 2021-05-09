@@ -22,7 +22,7 @@ export default function SnackNotif({
       {children}
       <Typography
         variant="caption"
-        className={`px-4 py-2 bg-pure-black-1000 text-neutral-200 absolute bottom-full mb-2 transform origin-bottom transition-transform rounded-xl ${
+        className={`px-4 py-2 bg-pure-black-1000 text-neutral-200 absolute bottom-full mb-2 transform origin-bottom left-1/2 -translate-x-1/2 transition-transform rounded-xl ${
           !run && "scale-0"
         }`}
       >
