@@ -1,7 +1,8 @@
 import { PlayIcon } from "@heroicons/react/solid";
 import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Button from "../components/buttons/Button";
+import MediaTimeline from "../components/data_display/MediaTimeline";
 import SnackNotif from "../components/feedbacks/SnackNotif";
 import SearchBar from "../components/inputs/SearchBar";
 import UploadFile from "../components/inputs/UploadFile";
@@ -16,25 +17,29 @@ export default function Upload() {
   const appCtx = useAppContext();
   const router = useRouter();
 
-  const handleSearch = (e) => {
-    const url = isValidURL(e.target.value);
-    url ? loadIframe(e.target.value) : setNotif(errors.invalid_url);
-  };
+  const handleSearch = async (e) => {
+    if (e.target.value == "") return false;
 
-  useEffect(() => {
-    if (loadedIframe == false) setNotif(errors.unauthorized_iframe);
+    const url = isValidURL(e.target.value);
+    url ? await loadIframe(e.target.value) : setNotif(errors.invalid_url);
+
+    if (loadedIframe == null) setNotif(errors.unauthorized_iframe);
     else
       appCtx.setMedia([
         ...appCtx.media,
-        { data: loadedIframe, type: "Iframe" },
+        { data: loadedIframe, type: "Iframe", name: "Iframe" },
       ]);
-  }, [loadedIframe]);
+  };
+
   return (
     <div className="flex flex-col items-center justify-center w-full h-screen">
       <UploadFile
         className="w-full"
-        onFileLoad={(file) =>
-          appCtx.setMedia([...appCtx.media, { data: file, type: "PDF" }])
+        onFileLoad={(file, fileName) =>
+          appCtx.setMedia([
+            ...appCtx.media,
+            { data: file, type: "PDF", name: fileName },
+          ])
         }
       />
       <SnackNotif
@@ -44,12 +49,13 @@ export default function Upload() {
       >
         <SearchBar onChange={handleSearch} />
       </SnackNotif>
-      <Button
-        onClick={() => router.push("/player")}
-        children="Start"
-        className="mt-4"
-        icon={<PlayIcon />}
-      />
+      <MediaTimeline className="mt-8">
+        <Button
+          onClick={() => router.push("/player")}
+          children="Start"
+          icon={<PlayIcon />}
+        />
+      </MediaTimeline>
     </div>
   );
 }

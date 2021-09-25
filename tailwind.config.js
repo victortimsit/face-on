@@ -18,7 +18,8 @@ module.exports = {
         500: "rgba(0, 0, 0, .5)",
         300: "rgba(0, 0, 0, .3)",
         200: "rgba(0, 0, 0, .2)",
-      }
+      },
+      white: colors.white,
     }
   },
   variants: {
