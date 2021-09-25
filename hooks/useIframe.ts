@@ -40,6 +40,7 @@ const useIframe = () => {
   const [loadedIframe, setLoadedIframe] = useState(null);
   const loadIframe = async (url: string) => {
     if (url) {
+      console.log(url);
       // setLoadedIframe(null);
       // if(!url.includes("http")) return false
       const iframeUrl: string = url.includes(ServiceURL.GOOGLE_SLIDE)

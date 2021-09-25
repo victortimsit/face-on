@@ -1,6 +1,6 @@
 import { PlayIcon } from "@heroicons/react/solid";
 import { useRouter } from "next/router";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Button from "../components/buttons/Button";
 import MediaTimeline from "../components/data_display/MediaTimeline";
 import SnackNotif from "../components/feedbacks/SnackNotif";
@@ -13,23 +13,27 @@ import { isValidURL } from "../utils/isValidURL";
 
 export default function Upload() {
   const [notif, setNotif] = useState<false | string>(false);
+  const [value, setValue] = useState<boolean>(null);
   const [loadedIframe, loadIframe] = useIframe();
   const appCtx = useAppContext();
   const router = useRouter();
 
   const handleSearch = async (e) => {
+    setValue(e.target.value);
     if (e.target.value == "") return false;
 
     const url = isValidURL(e.target.value);
     url ? await loadIframe(e.target.value) : setNotif(errors.invalid_url);
+  };
 
-    if (loadedIframe == null) setNotif(errors.unauthorized_iframe);
-    else
+  useEffect(() => {
+    if (loadedIframe == null && value) setNotif(errors.unauthorized_iframe);
+    if (loadedIframe)
       appCtx.setMedia([
         ...appCtx.media,
         { data: loadedIframe, type: "Iframe", name: "Iframe" },
       ]);
-  };
+  }, [loadedIframe]);
 
   return (
     <div className="flex flex-col items-center justify-center w-full h-screen">
