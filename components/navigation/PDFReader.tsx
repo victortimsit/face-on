@@ -28,7 +28,6 @@ export default function PdfReader({
       <Document
         file={file}
         onLoadSuccess={onDocumentLoadSuccess}
-        className="bg-pure-black"
         loading={
           <Typography variant="h3" className="h-screen w-screen bg-pure-black">
             Loading document

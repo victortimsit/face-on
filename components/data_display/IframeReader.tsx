@@ -25,7 +25,6 @@ export default function IframeReader({
 
   useEffect(() => {
     setLoaded(ref.current?.contentDocument ?? false);
-    window.addEventListener("message", (e) => console.log(e.data));
     if (!loaded && onLoadError) onLoadError();
     else if (onLoadSuccess) onLoadSuccess();
   }, [loaded]);

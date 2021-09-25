@@ -1,5 +1,4 @@
-import React, { useRef, useState } from "react";
-import { useHotkeys } from "react-hotkeys-hook";
+import React, { useEffect, useRef, useState } from "react";
 import IframeReader from "../components/data_display/IframeReader";
 import Typography from "../components/data_display/Typography";
 import PdfReader from "../components/navigation/PDFReader";
@@ -32,7 +31,6 @@ function CurrentMedia({
         src={media.data as Iframe}
         className="w-screen h-screen"
         onLoadSuccess={() => {
-          console.log("iframe success");
           onLoad(1);
         }}
       />
@@ -48,11 +46,11 @@ export default function Player() {
   const controlsTimeoutRef = useRef(null);
   const currentPageRef = useRef(null);
 
-  const incLoop = (idx, length, min = 1) => {
+  const incLoop = (idx: number, length: number, min = 1) => {
     return idx + 1 > length ? min : idx + 1;
   };
 
-  const decLoop = (idx, length, min = 1) => {
+  const decLoop = (idx: number, length: number, min = 1) => {
     return idx - 1 < min ? length : idx - 1;
   };
 
@@ -75,34 +73,26 @@ export default function Player() {
 
     controlsTimeoutRef.current = setTimeout(() => {
       setControls(false);
-    }, 1000);
+    }, 5000);
   };
 
-  useHotkeys(
-    "left",
-    (e) => {
-      e.preventDefault();
-      handlePrev();
-    },
-    {},
-    [currentPageIdx]
-  );
-  useHotkeys(
-    "right",
-    (e) => {
-      e.preventDefault();
-      handleNext();
-    },
-    {},
-    [currentPageIdx]
-  );
+  const handleKey = (e) => {
+    if (e.key == "ArrowLeft") handlePrev();
+    if (e.key == "ArrowRight") handleNext();
+  };
+
+  useEffect(() => {
+    window.addEventListener("keydown", (e) => handleKey(e));
+    return window.removeEventListener("keydown", (e) => handleKey(e));
+  }, [currentPageIdx, currentMediaIdx]);
 
   const appCtx = useAppContext();
 
   if (appCtx?.media == null) return <div>No files</div>;
   return (
     <div
-      className={`h-screen flex items-center bg-pure-black relative ${
+      onKeyPress={handleKey}
+      className={`h-screen flex items-center bg-pure-black-1000 relative ${
         controls ? "cursor-auto" : "cursor-none"
       } `}
       onMouseMove={handleMouseMove}
@@ -110,10 +100,7 @@ export default function Player() {
       <CurrentMedia
         media={appCtx.media[currentMediaIdx]}
         currentPageIdx={currentPageIdx}
-        onLoad={(n) => {
-          console.log("handle page number", n);
-          setNumberOfPages(n);
-        }}
+        onLoad={setNumberOfPages}
       />
       <ReaderControls
         className={`fixed bottom-0 left-1/2 transform -translate-x-1/2 transition-opacity ${

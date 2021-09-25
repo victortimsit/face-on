@@ -28,7 +28,6 @@ export default function Upload() {
 
   useEffect(() => {
     if (loadedIframe == null && value) setNotif(errors.unauthorized_iframe);
-    console.log(loadedIframe);
     if (loadedIframe) {
       setValue("");
       appCtx.setMedia([
