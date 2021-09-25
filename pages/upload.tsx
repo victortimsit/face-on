@@ -13,7 +13,7 @@ import { isValidURL } from "../utils/isValidURL";
 
 export default function Upload() {
   const [notif, setNotif] = useState<false | string>(false);
-  const [value, setValue] = useState<boolean>(null);
+  const [value, setValue] = useState<string>(null);
   const [loadedIframe, loadIframe] = useIframe();
   const appCtx = useAppContext();
   const router = useRouter();
@@ -28,11 +28,14 @@ export default function Upload() {
 
   useEffect(() => {
     if (loadedIframe == null && value) setNotif(errors.unauthorized_iframe);
-    if (loadedIframe)
+    console.log(loadedIframe);
+    if (loadedIframe) {
+      setValue("");
       appCtx.setMedia([
         ...appCtx.media,
         { data: loadedIframe, type: "Iframe", name: "Iframe" },
       ]);
+    }
   }, [loadedIframe]);
 
   return (
@@ -51,7 +54,7 @@ export default function Upload() {
         run={notif != false}
         onEnded={() => setNotif(false)}
       >
-        <SearchBar onChange={handleSearch} />
+        <SearchBar value={value} onChange={handleSearch} />
       </SnackNotif>
       <MediaTimeline className="mt-8">
         <Button

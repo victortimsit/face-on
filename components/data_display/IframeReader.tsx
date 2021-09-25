@@ -19,7 +19,7 @@ export default function IframeReader({
   // Keep focus on iframe on click outside
   useOnClickOutside(ref, () => {
     setTimeout(() => {
-      ref.current.contentWindow.focus();
+      // ref.current?.contentWindow.focus();
     }, 100);
   });
 
@@ -33,7 +33,7 @@ export default function IframeReader({
   return (
     <iframe
       onLoad={(e) => {
-        ref.current.contentWindow.focus();
+        // ref.current.contentWindow.focus();
       }}
       ref={ref}
       src={src}

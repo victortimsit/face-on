@@ -2,9 +2,11 @@ import { SearchIcon } from "@heroicons/react/solid";
 import React, { ChangeEventHandler } from "react";
 
 export default function SearchBar({
+  value,
   className,
   onChange,
 }: {
+  value: string;
   className?: string;
   onChange: ChangeEventHandler<HTMLInputElement>;
 }) {
@@ -19,6 +21,7 @@ export default function SearchBar({
         name="search"
         placeholder="Search"
         type="text"
+        value={value}
         onChange={onChange}
       />
       <SearchIcon className="left-4 w-5 h-5 absolute text-neutral-900 pointer-events-none" />
