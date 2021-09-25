@@ -1,13 +1,14 @@
 import React, { useEffect, useRef, useState } from "react";
 import useOnClickOutside from "use-onclickoutside";
+import { Iframe } from "../../types/media";
 
-export default function Iframe({
+export default function IframeReader({
   src,
   className,
   onLoadError,
   onLoadSuccess,
 }: {
-  src: string;
+  src: Iframe;
   className?: string;
   onLoadError?: () => void;
   onLoadSuccess?: () => void;

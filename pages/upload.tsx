@@ -7,26 +7,35 @@ import SearchBar from "../components/inputs/SearchBar";
 import UploadFile from "../components/inputs/UploadFile";
 import { useAppContext } from "../context/state";
 import { errors } from "../data/errors";
+import useIframe from "../hooks/useIframe";
 import { isValidURL } from "../utils/isValidURL";
 
 export default function Upload() {
   const [notif, setNotif] = useState<false | string>(false);
+  const [loadedIframe, loadIframe] = useIframe();
   const appCtx = useAppContext();
   const router = useRouter();
 
   const handleSearch = (e) => {
     const url = isValidURL(e.target.value);
-    url ? appCtx.loadIframe(e.target.value) : setNotif(errors.invalid_url);
+    url ? loadIframe(e.target.value) : setNotif(errors.invalid_url);
   };
 
   useEffect(() => {
-    if (appCtx?.loadedIframe == false) setNotif(errors.unauthorized_iframe);
-  }, [appCtx?.loadedIframe]);
+    if (loadedIframe == false) setNotif(errors.unauthorized_iframe);
+    else
+      appCtx.setMedia([
+        ...appCtx.media,
+        { data: loadedIframe, type: "Iframe" },
+      ]);
+  }, [loadedIframe]);
   return (
     <div className="flex flex-col items-center justify-center w-full h-screen">
       <UploadFile
         className="w-full"
-        onFileLoad={(file) => appCtx.setFiles([...appCtx.files, file])}
+        onFileLoad={(file) =>
+          appCtx.setMedia([...appCtx.media, { data: file, type: "PDF" }])
+        }
       />
       <SnackNotif
         message={notif && notif}

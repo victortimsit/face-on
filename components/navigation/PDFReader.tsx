@@ -2,6 +2,7 @@ import { useWindowHeight, useWindowWidth } from "@react-hook/window-size";
 import React, { useRef, useState } from "react";
 import { useHotkeys } from "react-hotkeys-hook";
 import { Document, Page, pdfjs } from "react-pdf";
+import { PDF } from "../../types/media";
 import Typography from "../data_display/Typography";
 import ReaderControls from "./ReaderControls";
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
@@ -10,7 +11,7 @@ export default function PdfReader({
   file,
   className,
 }: {
-  file: any;
+  file: PDF;
   className?: string;
 }) {
   const [numPages, setNumPages] = useState(null);

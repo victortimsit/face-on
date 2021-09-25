@@ -1,17 +1,19 @@
 import { createContext, useContext, useState } from "react";
-import useIframe from "../hooks/useIframe";
+import { Media, MediaType } from "../types/media";
 
-const AppContext = createContext(null);
+type State = {
+  media: Media<MediaType>[];
+  setMedia: Function;
+};
+
+const AppContext = createContext<State>(null);
 
 export function AppWrapper({ children }) {
-  const [files, setFiles] = useState([]);
-  const [loadedIframe, loadIframe] = useIframe();
+  const [media, setMedia] = useState<Media<MediaType>[]>([]);
 
-  const state = {
-    files,
-    setFiles,
-    loadedIframe,
-    loadIframe,
+  const state: State = {
+    media,
+    setMedia,
   };
 
   return <AppContext.Provider value={state}>{children}</AppContext.Provider>;

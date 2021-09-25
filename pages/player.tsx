@@ -1,18 +1,25 @@
 import React from "react";
-import Iframe from "../components/data_display/Iframe";
+import IframeReader from "../components/data_display/IframeReader";
 import PdfReader from "../components/navigation/PDFReader";
 import { useAppContext } from "../context/state";
+import { Iframe } from "../types/media";
+
 export default function Player() {
   const appCtx = useAppContext();
   console.log(appCtx);
-  if (appCtx?.files == null && appCtx?.loadedIframe == null)
-    return <div>No files</div>;
+  if (appCtx?.media == null) return <div>No files</div>;
   return (
     <div>
-      {appCtx.files && appCtx.files.map((file) => <PdfReader file={file} />)}
-      {appCtx.loadedIframe && (
-        <Iframe src={appCtx.loadedIframe} className="w-screen h-screen" />
-      )}
+      {appCtx.media.map((medium) => {
+        if (medium.type == "PDF") return <PdfReader file={medium.data} />;
+        if (medium.type == "Iframe")
+          return (
+            <IframeReader
+              src={medium.data as Iframe}
+              className="w-screen h-screen"
+            />
+          );
+      })}
     </div>
   );
 }

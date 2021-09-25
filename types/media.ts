@@ -1,8 +1,9 @@
 export type Media<Type> = {
-  type: "PDF" | "Iframe",
-  data: Type,
-}
-export type PDF = string | ArrayBuffer
+  type: "PDF" | "Iframe";
+  data: Type;
+};
+export type PDF = string | ArrayBuffer;
 
-export type Iframe = string
+export type Iframe = string;
 
+export type MediaType = PDF | Iframe;
