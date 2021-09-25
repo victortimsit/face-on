@@ -1,6 +1,5 @@
 import Head from "next/head";
 import React from "react";
-import FloatFace from "../components/feedbacks/FloatFace";
 import Upload from "./upload";
 
 export default function Home() {
@@ -12,7 +11,6 @@ export default function Home() {
       </Head>
       <main>
         <Upload />
-        <FloatFace />
       </main>
     </div>
   );
