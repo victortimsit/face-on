@@ -20,6 +20,7 @@ export default function UploadFile({
 
     setTitle(file.name);
     setSubtitle(`Loading ${bytesToSize(file.size)}...`);
+
     fileReader.onload = (e) => onFileLoad(e.target.result);
   };
 

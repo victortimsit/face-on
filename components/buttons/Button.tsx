@@ -25,7 +25,10 @@ export default function Button({
       focus:outline-none active:bg-primary-900 hover:bg-primary-400 ${className}`}
       onClick={onClick}
     >
-      {icon && cloneElement(icon, { className: "h-5 w-5 text-neutral-50" })}
+      {icon &&
+        cloneElement(icon, {
+          className: `h-5 w-5 text-neutral-50 ${children && "mr-1"}`,
+        })}
       <Typography variant="button1" className="text-neutral-50">
         {children && children}
       </Typography>
