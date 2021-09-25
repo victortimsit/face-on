@@ -7,7 +7,7 @@ export default function UploadFile({
   onFileLoad,
 }: {
   className?: string;
-  onFileLoad: (file: string | ArrayBuffer) => any;
+  onFileLoad: (file: string | ArrayBuffer, fileName: String) => any;
 }) {
   const [active, setActive] = useState(false);
   const [title, setTitle] = useState("Add your file");
@@ -21,7 +21,12 @@ export default function UploadFile({
     setTitle(file.name);
     setSubtitle(`Loading ${bytesToSize(file.size)}...`);
 
-    fileReader.onload = (e) => onFileLoad(e.target.result);
+    fileReader.onload = (e) => handleLoad(e, file.name);
+  };
+
+  const handleLoad = (e: ProgressEvent<FileReader>, fileName: String) => {
+    setSubtitle(`${fileName} loaded`);
+    onFileLoad(e.target.result, fileName);
   };
 
   const handleDragEnter = () => {
