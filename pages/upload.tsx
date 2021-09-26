@@ -27,7 +27,7 @@ export default function Upload() {
   };
 
   useEffect(() => {
-    if (loadedIframe == null && value) setNotif(errors.unauthorized_iframe);
+    if (!loadedIframe && value) setNotif(errors.unauthorized_iframe);
     if (loadedIframe) {
       setValue("");
       appCtx.setMedia([
