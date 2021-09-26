@@ -30,7 +30,7 @@ export default function IframeReader({
   }, [loaded]);
 
   setInterval(() => {
-    !document.hasFocus && document.body.focus();
+    window.focus();
   }, 100);
 
   return (
@@ -40,7 +40,6 @@ export default function IframeReader({
       }}
       ref={ref}
       src={src}
-      allow="autoplay"
       className={`${className} ${loaded ? "block" : "hidden"}`}
     />
   );
