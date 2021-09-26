@@ -1,19 +1,21 @@
-import { PlayIcon } from "@heroicons/react/solid";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import Button from "../components/buttons/Button";
 import MediaTimeline from "../components/data_display/MediaTimeline";
+import Typography from "../components/data_display/Typography";
 import SnackNotif from "../components/feedbacks/SnackNotif";
 import SearchBar from "../components/inputs/SearchBar";
 import UploadFile from "../components/inputs/UploadFile";
 import { useAppContext } from "../context/state";
 import { errors } from "../data/errors";
 import useIframe from "../hooks/useIframe";
+import { bytesToSize } from "../utils/file";
 import { isValidURL } from "../utils/isValidURL";
 
 export default function Upload() {
   const [notif, setNotif] = useState<false | string>(false);
   const [value, setValue] = useState<string>(null);
+  const [status, setStatus] = useState<string>(null);
   const [loadedIframe, loadIframe] = useIframe();
   const appCtx = useAppContext();
   const router = useRouter();
@@ -38,6 +40,24 @@ export default function Upload() {
     }
   }, [loadedIframe]);
 
+  const handleLoad = (file, fileName) => {
+    setStatus(`${fileName} loaded`);
+    appCtx.setMedia([
+      ...appCtx.media,
+      { data: file, type: "PDF", name: fileName },
+    ]);
+  };
+
+  const handleFile = (e) => {
+    const file = e.target.files[0];
+    const fileReader = new FileReader();
+    fileReader.readAsDataURL(file);
+
+    setStatus(`Loading ${file.name} - ${bytesToSize(file.size)}...`);
+
+    fileReader.onload = (e) => handleLoad(e, file.name);
+  };
+
   return (
     <div className="flex flex-col items-center justify-center w-full h-screen">
       <UploadFile
@@ -49,18 +69,27 @@ export default function Upload() {
           ])
         }
       />
+
       <SnackNotif
         message={notif && notif}
         run={notif != false}
         onEnded={() => setNotif(false)}
+        className="w-96 max-w-xs"
       >
-        <SearchBar value={value} onChange={handleSearch} />
+        <SearchBar
+          value={value}
+          onChange={handleSearch}
+          onFileChange={handleFile}
+        />
       </SnackNotif>
-      <MediaTimeline className="mt-8">
+      <Typography variant="caption" className="my-4 text-neutral-500">
+        {status}ㅤ
+      </Typography>
+      <MediaTimeline className="mt-12">
         <Button
           onClick={() => router.push("/player")}
-          children="Start"
-          icon={<PlayIcon />}
+          children="Start 🧑"
+          // icon={<PlayIcon />}
         />
       </MediaTimeline>
     </div>

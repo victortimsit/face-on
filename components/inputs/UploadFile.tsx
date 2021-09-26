@@ -10,8 +10,10 @@ export default function UploadFile({
   onFileLoad: (file: string | ArrayBuffer, fileName: String) => any;
 }) {
   const [active, setActive] = useState(false);
-  const [title, setTitle] = useState("Add your file");
-  const [subtitle, setSubtitle] = useState("Drag or click anywhere");
+  const [title, setTitle] = useState("Put my face on...");
+  const [subtitle, setSubtitle] = useState(
+    "Add PDF or paste URL (Youtube, Figma, Website...)"
+  );
 
   const handleFile = (e) => {
     const file = e.target.files[0];
