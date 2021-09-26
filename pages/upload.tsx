@@ -30,9 +30,10 @@ export default function Upload() {
     if (!loadedIframe && value) setNotif(errors.unauthorized_iframe);
     if (loadedIframe) {
       setValue("");
+      const name = new URL(loadedIframe).host;
       appCtx.setMedia([
         ...appCtx.media,
-        { data: loadedIframe, type: "Iframe", name: "Iframe" },
+        { data: loadedIframe, type: "Iframe", name },
       ]);
     }
   }, [loadedIframe]);
