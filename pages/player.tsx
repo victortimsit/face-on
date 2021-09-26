@@ -1,4 +1,5 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
+import { useHotkeys } from "react-hotkeys-hook";
 import IframeReader from "../components/data_display/IframeReader";
 import Typography from "../components/data_display/Typography";
 import PdfReader from "../components/navigation/PDFReader";
@@ -6,47 +7,63 @@ import ReaderControls from "../components/navigation/ReaderControls";
 import { useAppContext } from "../context/state";
 import { Iframe, Media, MediaType } from "../types/media";
 
-function CurrentMedia({
+function Slider({
   media,
   currentPageIdx,
+  currentMediaIdx,
   onLoad,
 }: {
-  media: Media<MediaType>;
+  media: Media<MediaType>[];
   currentPageIdx: number;
-  onLoad: (currentPageIdx: number) => void;
+  currentMediaIdx: number;
+  onLoad: (mediaIdx: number, currentPageIdx: number) => void;
 }) {
-  if (media == null)
-    return <Typography className="text-center w-full">No media</Typography>;
-  if (media.type == "PDF")
-    return (
-      <PdfReader
-        currentPageIdx={currentPageIdx}
-        file={media.data}
-        onLoad={onLoad}
-      />
-    );
-  if (media.type == "Iframe")
-    return (
-      <IframeReader
-        src={media.data as Iframe}
-        className="w-screen h-screen"
-        onLoadSuccess={() => {
-          onLoad(1);
-        }}
-      />
-    );
+  return (
+    <>
+      {media.map((media, i) => {
+        const className = i == currentMediaIdx ? "visible" : "hidden";
+        if (media == null)
+          return (
+            <Typography className={`text-center w-full ${className}`}>
+              No media
+            </Typography>
+          );
+        if (media.type == "PDF")
+          return (
+            <PdfReader
+              currentPageIdx={currentPageIdx}
+              file={media.data}
+              className={className}
+              onLoad={(n) => onLoad(n, i)}
+            />
+          );
+        if (media.type == "Iframe")
+          return (
+            <IframeReader
+              src={media.data as Iframe}
+              className={`w-screen h-screen ${className}`}
+            />
+          );
+      })}
+    </>
+  );
 }
 
 export default function Player() {
+  const appCtx = useAppContext();
   const [currentMediaIdx, setCurrentMediaIdx] = useState(0);
-  const [numberOfPages, setNumberOfPages] = useState(null);
+  const [slides, setSlides] = useState(
+    appCtx.media.map((media) => {
+      return { media, numberOfPages: 1 };
+    })
+  );
   const [currentPageIdx, setCurrentPageIdx] = useState(1);
   const [controls, setControls] = useState(false);
 
   const controlsTimeoutRef = useRef(null);
-  const currentPageRef = useRef(null);
 
   const incLoop = (idx: number, length: number, min = 1) => {
+    console.log("inc lop", idx, length);
     return idx + 1 > length ? min : idx + 1;
   };
 
@@ -55,17 +72,23 @@ export default function Player() {
   };
 
   const handleNext = () => {
-    if (currentPageIdx == numberOfPages) {
+    if (currentPageIdx == slides[currentMediaIdx].numberOfPages) {
       setCurrentMediaIdx(incLoop(currentMediaIdx, appCtx.media.length - 1, 0));
       setCurrentPageIdx(1);
-    } else setCurrentPageIdx(incLoop(currentPageIdx, numberOfPages));
+    } else
+      setCurrentPageIdx(
+        incLoop(currentPageIdx, slides[currentMediaIdx].numberOfPages)
+      );
   };
 
   const handlePrev = () => {
     if (currentPageIdx == 1) {
       setCurrentMediaIdx(decLoop(currentMediaIdx, appCtx.media.length - 1, 0));
       setCurrentPageIdx(1);
-    } else setCurrentPageIdx(decLoop(currentPageIdx, numberOfPages));
+    } else
+      setCurrentPageIdx(
+        decLoop(currentPageIdx, slides[currentMediaIdx].numberOfPages)
+      );
   };
   const handleMouseMove = () => {
     clearTimeout(controlsTimeoutRef.current);
@@ -73,35 +96,46 @@ export default function Player() {
 
     controlsTimeoutRef.current = setTimeout(() => {
       setControls(false);
-    }, 5000);
+    }, 2000);
   };
 
-  const handleKey = (e) => {
-    if (e.key == "ArrowLeft") handlePrev();
-    if (e.key == "ArrowRight") handleNext();
-  };
-
-  useEffect(() => {
-    window.addEventListener("keydown", (e) => handleKey(e));
-    return window.removeEventListener("keydown", (e) => handleKey(e));
-  }, [currentPageIdx, currentMediaIdx]);
-
-  const appCtx = useAppContext();
+  useHotkeys(
+    "left",
+    (e) => {
+      e.preventDefault();
+      handlePrev();
+    },
+    {},
+    [currentPageIdx, currentMediaIdx]
+  );
+  useHotkeys(
+    "right",
+    (e) => {
+      e.preventDefault();
+      handleNext();
+    },
+    {},
+    [currentPageIdx, currentMediaIdx]
+  );
 
   if (appCtx?.media == null) return <div>No files</div>;
   return (
     <div
-      onKeyPress={handleKey}
       className={`h-screen flex items-center bg-pure-black-1000 relative ${
         controls ? "cursor-auto" : "cursor-none"
       } `}
       onMouseMove={handleMouseMove}
     >
-      <CurrentMedia
-        media={appCtx.media[currentMediaIdx]}
+      <Slider
+        media={slides.map((slide) => slide.media)}
         currentPageIdx={currentPageIdx}
-        onLoad={setNumberOfPages}
+        currentMediaIdx={currentMediaIdx}
+        onLoad={(n, i) => {
+          slides[i].numberOfPages = n;
+          setSlides(slides);
+        }}
       />
+
       <ReaderControls
         className={`fixed bottom-0 left-1/2 transform -translate-x-1/2 transition-opacity ${
           controls
@@ -110,7 +144,7 @@ export default function Player() {
         }`}
         onNext={handleNext}
         onPrev={handlePrev}
-        length={numberOfPages}
+        length={slides[currentMediaIdx].numberOfPages}
         current={currentPageIdx}
       />
     </div>
