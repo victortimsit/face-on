@@ -41,7 +41,13 @@ const getYoutubeIframe = (url: string) => {
   const urlParams = new URLSearchParams(new URL(url).search);
   const vParam = urlParams.get("v");
 
-  return "https://" + ServiceURL.YOUTUBE + ServiceEmbedPath.YOUTUBE + vParam;
+  return (
+    "https://" +
+    ServiceURL.YOUTUBE +
+    ServiceEmbedPath.YOUTUBE +
+    vParam +
+    "?autoplay=1"
+  );
 };
 
 const useIframe = () => {

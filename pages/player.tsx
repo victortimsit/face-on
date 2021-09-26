@@ -1,3 +1,4 @@
+import router from "next/router";
 import React, { useRef, useState } from "react";
 import { useHotkeys } from "react-hotkeys-hook";
 import IframeReader from "../components/data_display/IframeReader";
@@ -117,6 +118,15 @@ export default function Player() {
     },
     {},
     [currentPageIdx, currentMediaIdx]
+  );
+  useHotkeys(
+    "esc",
+    (e) => {
+      e.preventDefault();
+      router.push("/");
+    },
+    {},
+    []
   );
 
   if (appCtx?.media == null) return <div>No files</div>;

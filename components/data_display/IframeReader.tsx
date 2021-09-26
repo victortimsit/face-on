@@ -29,6 +29,10 @@ export default function IframeReader({
     else if (onLoadSuccess) onLoadSuccess();
   }, [loaded]);
 
+  setInterval(() => {
+    !document.hasFocus && document.body.focus();
+  }, 100);
+
   return (
     <iframe
       onLoad={(e) => {
@@ -36,6 +40,7 @@ export default function IframeReader({
       }}
       ref={ref}
       src={src}
+      allow="autoplay"
       className={`${className} ${loaded ? "block" : "hidden"}`}
     />
   );
