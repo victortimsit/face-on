@@ -83,8 +83,9 @@ export default function Player() {
 
   const handlePrev = () => {
     if (currentPageIdx == 1) {
-      setCurrentMediaIdx(decLoop(currentMediaIdx, appCtx.media.length - 1, 0));
-      setCurrentPageIdx(1);
+      const newMediaIdx = decLoop(currentMediaIdx, appCtx.media.length - 1, 0);
+      setCurrentMediaIdx(newMediaIdx);
+      setCurrentPageIdx(slides[newMediaIdx].numberOfPages);
     } else
       setCurrentPageIdx(
         decLoop(currentPageIdx, slides[currentMediaIdx].numberOfPages)
