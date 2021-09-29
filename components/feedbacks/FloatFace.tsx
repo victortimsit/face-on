@@ -4,10 +4,11 @@ import {
   ChevronRightIcon,
   ChevronUpIcon,
 } from "@heroicons/react/solid";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Draggable from "react-draggable";
 import { useHotkeys } from "react-hotkeys-hook";
 import Webcam from "react-webcam";
+import { useAppContext } from "../../context/state";
 import Button from "../buttons/Button";
 
 const Position = {
@@ -22,6 +23,7 @@ const Position = {
 };
 
 export default function Floatface(props) {
+  const appCtx = useAppContext();
   const [controls, setControls] = useState(false);
   const [ready, setReady] = useState(false);
   const [dragPosition, setDragPosition] = useState({ x: 0, y: 0 });
@@ -31,6 +33,10 @@ export default function Floatface(props) {
     y: Position.y.bottom,
   });
   let oldPos = useRef({ x: Position.x.left, y: Position.y.bottom });
+  const className = {
+    float: `rounded-full shadow-2xl m-2 flex-1`,
+    full: `width-screen h-screen m-auto`,
+  };
 
   const handlePosition = (e: any, position: { x?: string; y?: string }) => {
     e.preventDefault();
@@ -53,6 +59,19 @@ export default function Floatface(props) {
   useHotkeys("cmd+right", (e) => handlePosition(e, { x: Position.x.right }));
   useHotkeys("cmd+up", (e) => handlePosition(e, { y: Position.y.top }));
   useHotkeys("cmd+down", (e) => handlePosition(e, { y: Position.y.bottom }));
+
+  useEffect(() => {
+    if (appCtx.fullFace)
+      setPosition({
+        x: "left-0 w-screen rounded-none",
+        y: "top-0 h-screen",
+      });
+    else
+      setPosition({
+        x: Position.x.left,
+        y: Position.y.bottom,
+      });
+  }, [appCtx.fullFace]);
   return (
     <Draggable
       defaultClassName={`cursor-grab`}
@@ -65,13 +84,24 @@ export default function Floatface(props) {
         className={`${position.x} ${position.y} fixed`}
         onMouseEnter={() => setControls(true)}
         onMouseLeave={() => setControls(false)}
+        style={{
+          width: !appCtx.fullFace && 216,
+          height: !appCtx.fullFace && 216,
+        }}
       >
         <Webcam
           onUserMedia={() => setReady(true)}
-          className={`rounded-full shadow-2xl m-2 flex-1 ${
+          className={`${appCtx.fullFace ? className.full : className.float} ${
             !ready && "scale-0"
-          } transform transition-transform`}
-          videoConstraints={{ width: 200, height: 200 }}
+          } transform transition-transform bg-pure-black-1000`}
+          style={{
+            width: !appCtx.fullFace && 200,
+            height: !appCtx.fullFace && 200,
+          }}
+          videoConstraints={{
+            width: !appCtx.fullFace && 200,
+            height: !appCtx.fullFace && 200,
+          }}
         />
         <div
           className={`flex items-center justify-center transition-opacity ${

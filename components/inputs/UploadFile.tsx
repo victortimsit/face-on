@@ -49,10 +49,10 @@ export default function UploadFile({
       onDragEnd={handleDragEnd}
       onDragExit={handleDragEnd}
     >
-      <Typography variant="h3" className="pb-6 pointer-events-none">
+      <Typography variant="h3" className="pb-12 pointer-events-none">
         {title}
       </Typography>
-      <Typography variant="body1" className="pb-12 pointer-events-none">
+      <Typography variant="body1" className="pb-6 pointer-events-none">
         {subtitle}
       </Typography>
       <input

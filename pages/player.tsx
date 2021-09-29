@@ -2,7 +2,6 @@ import router from "next/router";
 import React, { useRef, useState } from "react";
 import { useHotkeys } from "react-hotkeys-hook";
 import IframeReader from "../components/data_display/IframeReader";
-import Typography from "../components/data_display/Typography";
 import PdfReader from "../components/navigation/PDFReader";
 import ReaderControls from "../components/navigation/ReaderControls";
 import { useAppContext } from "../context/state";
@@ -19,16 +18,15 @@ function Slider({
   currentMediaIdx: number;
   onLoad: (mediaIdx: number, currentPageIdx: number) => void;
 }) {
+  const appCtx = useAppContext();
   return (
     <>
       {media.map((media, i) => {
         const className = i == currentMediaIdx ? "visible" : "hidden";
         if (media == null)
-          return (
-            <Typography className={`text-center w-full ${className}`}>
-              No media
-            </Typography>
-          );
+          return media == null && className == "visible"
+            ? appCtx.setFullFace(true)
+            : appCtx.setFullFace(false);
         if (media.type == "PDF")
           return (
             <PdfReader
@@ -53,11 +51,13 @@ function Slider({
 export default function Player() {
   const appCtx = useAppContext();
   const [currentMediaIdx, setCurrentMediaIdx] = useState(0);
-  const [slides, setSlides] = useState(
-    appCtx.media.map((media) => {
+  const [slides, setSlides] = useState([
+    ...appCtx.media.map((media) => {
       return { media, numberOfPages: 1 };
-    })
-  );
+    }),
+    { media: null, numberOfPages: 1 },
+  ]);
+  console.log(slides);
   const [currentPageIdx, setCurrentPageIdx] = useState(1);
   const [controls, setControls] = useState(false);
 
@@ -74,7 +74,7 @@ export default function Player() {
 
   const handleNext = () => {
     if (currentPageIdx == slides[currentMediaIdx]?.numberOfPages) {
-      setCurrentMediaIdx(incLoop(currentMediaIdx, appCtx.media.length - 1, 0));
+      setCurrentMediaIdx(incLoop(currentMediaIdx, slides.length - 1, 0));
       setCurrentPageIdx(1);
     } else
       setCurrentPageIdx(
@@ -84,7 +84,7 @@ export default function Player() {
 
   const handlePrev = () => {
     if (currentPageIdx == 1) {
-      const newMediaIdx = decLoop(currentMediaIdx, appCtx.media.length - 1, 0);
+      const newMediaIdx = decLoop(currentMediaIdx, slides.length - 1, 0);
       setCurrentMediaIdx(newMediaIdx);
       setCurrentPageIdx(slides[newMediaIdx]?.numberOfPages);
     } else
@@ -143,7 +143,7 @@ export default function Player() {
         currentMediaIdx={currentMediaIdx}
         onLoad={(n, i) => {
           slides[i].numberOfPages = n;
-          setSlides(slides);
+          setSlides([...slides, { media: null, numberOfPages: 1 }]);
         }}
       />
 

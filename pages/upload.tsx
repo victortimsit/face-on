@@ -29,6 +29,7 @@ export default function Upload() {
   };
 
   useEffect(() => {
+    appCtx.setFullFace(false);
     if (!loadedIframe && value) setNotif(errors.unauthorized_iframe);
     if (loadedIframe) {
       setValue("");
@@ -55,7 +56,7 @@ export default function Upload() {
 
     setStatus(`Loading ${file.name} - ${bytesToSize(file.size)}...`);
 
-    fileReader.onload = (e) => handleLoad(e, file.name);
+    fileReader.onload = (e) => handleLoad(e.target.result, file.name);
   };
 
   return (
@@ -85,7 +86,7 @@ export default function Upload() {
       <Typography variant="caption" className="my-4 text-neutral-500">
         {status}ㅤ
       </Typography>
-      <MediaTimeline className="mt-12">
+      <MediaTimeline>
         <Button
           onClick={() => router.push("/player")}
           children="Start 🧑"
