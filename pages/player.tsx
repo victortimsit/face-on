@@ -73,12 +73,12 @@ export default function Player() {
   };
 
   const handleNext = () => {
-    if (currentPageIdx == slides[currentMediaIdx].numberOfPages) {
+    if (currentPageIdx == slides[currentMediaIdx]?.numberOfPages) {
       setCurrentMediaIdx(incLoop(currentMediaIdx, appCtx.media.length - 1, 0));
       setCurrentPageIdx(1);
     } else
       setCurrentPageIdx(
-        incLoop(currentPageIdx, slides[currentMediaIdx].numberOfPages)
+        incLoop(currentPageIdx, slides[currentMediaIdx]?.numberOfPages)
       );
   };
 
@@ -86,10 +86,10 @@ export default function Player() {
     if (currentPageIdx == 1) {
       const newMediaIdx = decLoop(currentMediaIdx, appCtx.media.length - 1, 0);
       setCurrentMediaIdx(newMediaIdx);
-      setCurrentPageIdx(slides[newMediaIdx].numberOfPages);
+      setCurrentPageIdx(slides[newMediaIdx]?.numberOfPages);
     } else
       setCurrentPageIdx(
-        decLoop(currentPageIdx, slides[currentMediaIdx].numberOfPages)
+        decLoop(currentPageIdx, slides[currentMediaIdx]?.numberOfPages)
       );
   };
   const handleMouseMove = () => {
@@ -155,7 +155,7 @@ export default function Player() {
         }`}
         onNext={handleNext}
         onPrev={handlePrev}
-        length={slides[currentMediaIdx].numberOfPages}
+        length={slides[currentMediaIdx]?.numberOfPages}
         current={currentPageIdx}
       />
     </div>
