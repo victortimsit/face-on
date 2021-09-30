@@ -143,7 +143,7 @@ export default function Player() {
         currentMediaIdx={currentMediaIdx}
         onLoad={(n, i) => {
           slides[i].numberOfPages = n;
-          setSlides([...slides, { media: null, numberOfPages: 1 }]);
+          setSlides(slides);
         }}
       />
 
