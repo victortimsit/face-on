@@ -5,11 +5,13 @@ export default function SnackNotif({
   children,
   message,
   run = false,
+  className,
   onEnded,
 }: {
   children: ReactElement;
   message: string;
   run: boolean;
+  className?: string;
   onEnded: () => void;
 }) {
   useEffect(() => {
@@ -18,7 +20,7 @@ export default function SnackNotif({
   }, [run]);
 
   return (
-    <div className="relative">
+    <div className={`relative ${className}`}>
       {children}
       <Typography
         variant="caption"

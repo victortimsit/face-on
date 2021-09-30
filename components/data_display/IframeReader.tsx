@@ -1,13 +1,14 @@
 import React, { useEffect, useRef, useState } from "react";
 import useOnClickOutside from "use-onclickoutside";
+import { Iframe } from "../../types/media";
 
-export default function Iframe({
+export default function IframeReader({
   src,
   className,
   onLoadError,
   onLoadSuccess,
 }: {
-  src: string;
+  src: Iframe;
   className?: string;
   onLoadError?: () => void;
   onLoadSuccess?: () => void;
@@ -18,21 +19,24 @@ export default function Iframe({
   // Keep focus on iframe on click outside
   useOnClickOutside(ref, () => {
     setTimeout(() => {
-      ref.current.contentWindow.focus();
+      // ref.current?.contentWindow.focus();
     }, 100);
   });
 
   useEffect(() => {
     setLoaded(ref.current?.contentDocument ?? false);
-    window.addEventListener("message", (e) => console.log(e.data));
     if (!loaded && onLoadError) onLoadError();
     else if (onLoadSuccess) onLoadSuccess();
   }, [loaded]);
 
+  setInterval(() => {
+    window.focus();
+  }, 100);
+
   return (
     <iframe
       onLoad={(e) => {
-        ref.current.contentWindow.focus();
+        // ref.current.contentWindow.focus();
       }}
       ref={ref}
       src={src}

@@ -7,11 +7,13 @@ export default function UploadFile({
   onFileLoad,
 }: {
   className?: string;
-  onFileLoad: (file: string | ArrayBuffer) => any;
+  onFileLoad: (file: string | ArrayBuffer, fileName: String) => any;
 }) {
   const [active, setActive] = useState(false);
-  const [title, setTitle] = useState("Add your file");
-  const [subtitle, setSubtitle] = useState("Drag or click anywhere");
+  const [title, setTitle] = useState("Put my face on...");
+  const [subtitle, setSubtitle] = useState(
+    "Add PDF or paste URL (Youtube, Figma, Website...)"
+  );
 
   const handleFile = (e) => {
     const file = e.target.files[0];
@@ -20,7 +22,13 @@ export default function UploadFile({
 
     setTitle(file.name);
     setSubtitle(`Loading ${bytesToSize(file.size)}...`);
-    fileReader.onload = (e) => onFileLoad(e.target.result);
+
+    fileReader.onload = (e) => handleLoad(e, file.name);
+  };
+
+  const handleLoad = (e: ProgressEvent<FileReader>, fileName: String) => {
+    setSubtitle(`${fileName} loaded`);
+    onFileLoad(e.target.result, fileName);
   };
 
   const handleDragEnter = () => {
@@ -41,10 +49,10 @@ export default function UploadFile({
       onDragEnd={handleDragEnd}
       onDragExit={handleDragEnd}
     >
-      <Typography variant="h3" className="pb-6 pointer-events-none">
+      <Typography variant="h3" className="pb-12 pointer-events-none">
         {title}
       </Typography>
-      <Typography variant="body1" className="pb-12 pointer-events-none">
+      <Typography variant="body1" className="pb-6 pointer-events-none">
         {subtitle}
       </Typography>
       <input
